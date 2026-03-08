@@ -521,12 +521,12 @@ private fun BindScreen() {
         return true
     }
 
-    fun sendTranslateStart(): Boolean {
-        return sendBleJson(JSONObject().put("action", "translate_start"))
+    fun sendTranslateStart() {
+        sendBleJson(JSONObject().put("action", "translate_start"))
     }
 
-    fun sendTranslateStop(): Boolean {
-        return sendBleJson(JSONObject().put("action", "translate_stop"))
+    fun sendTranslateStop() {
+        sendBleJson(JSONObject().put("action", "translate_stop"))
     }
 
     fun sendSelectLanguage(source: String, target: String) {
@@ -1335,25 +1335,6 @@ private fun BindScreen() {
             }
         } else if (activeGatt.value == null) {
             heartbeatLoopStarted = false
-        }
-    }
-
-    LaunchedEffect(appPage) {
-        if (appPage == AppPage.TRANSLATE) {
-            if (!isTranslateSessionActive) {
-                val startOk = sendTranslateStart()
-                if (startOk) {
-                    isTranslateSessionActive = true
-                    sendSelectLanguage(sourceLang, targetLang)
-                    logLink("info", "translate", "session started")
-                }
-            }
-        } else {
-            if (isTranslateSessionActive) {
-                sendTranslateStop()
-                isTranslateSessionActive = false
-                logLink("info", "translate", "session stopped")
-            }
         }
     }
 
